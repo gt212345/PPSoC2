@@ -105,19 +105,24 @@ public class LineChartFragment extends Fragment {
             lineChart.setDragEnabled(true);
             lineChart.setScaleEnabled(true);
             lineChart.setPinchZoom(true);
-            lineChart.setYRange(1, 4, true);
+            lineChart.setYRange(0, 3, true);
             lineChart.setDrawGridBackground(false);
+            lineChart.setDrawHorizontalGrid(false);
+            lineChart.setDrawVerticalGrid(false);
+
             lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
 
 
             Random random = new Random();
             Entry temp;
             for(int i = 0; i< 10;i++){
-                temp = new Entry((float)(random.nextInt(4-0)+1),i);//(Y軸數值,X軸數值)
+                temp = new Entry((float)(random.nextInt(4-0)),i);//(Y軸數值,X軸數值)
                 valsComp1.add(temp);
             }
             LineDataSet setComp1 = new LineDataSet(valsComp1, "DATA 1");
 
+//            setComp1.setDrawCubic(true);
+//            setComp1.setDrawCircles(false);
             setComp1.setLineWidth(5f);
             setComp1.setCircleSize(6f);
             setComp1.setHighLightColor(Color.rgb(244, 117, 117));
@@ -133,7 +138,7 @@ public class LineChartFragment extends Fragment {
              * X軸參數
              */
             for(int i = 0;i < valsComp1.size();i++){
-                xVals.add(i+1+"");
+                xVals.add(i+1+" m");
             }
 
             LineData data = new LineData(xVals, dataSets);
@@ -154,11 +159,19 @@ public class LineChartFragment extends Fragment {
             y.setLabelCount(3);
 
 
-            lineChart.animateX(3000);
+            lineChart.animateX(1500);
         } else {
             Log.w("LineChart", "is null");
         }
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            if(lineChart != null)lineChart.animateX(1500);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

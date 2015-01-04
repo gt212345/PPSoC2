@@ -18,6 +18,7 @@ public class BTConnectActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_btconnect);
+        getSupportActionBar().setTitle("PPSoC Lab");
         helloWorld = (TextView)findViewById(R.id.helloworld);
         helloWorld.setOnClickListener(new View.OnClickListener() {
             @Override
