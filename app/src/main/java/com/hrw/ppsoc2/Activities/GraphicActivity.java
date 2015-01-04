@@ -2,6 +2,7 @@ package com.hrw.ppsoc2.Activities;
 
 import java.util.Locale;
 
+import android.net.Uri;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -18,11 +19,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.hrw.ppsoc2.Fragments.BarChartFragment;
 import com.hrw.ppsoc2.Fragments.LineChartFragment;
 import com.hrw.ppsoc2.R;
 
 
-public class GraphicActivity extends ActionBarActivity {
+public class GraphicActivity extends ActionBarActivity implements LineChartFragment.OnFragmentInteractionListener, BarChartFragment.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -78,6 +80,11 @@ public class GraphicActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -98,14 +105,17 @@ public class GraphicActivity extends ActionBarActivity {
                 case 0:
                     fragment = LineChartFragment.newInstance("","");
                     return fragment;
+                case 1:
+                    fragment = BarChartFragment.newInstance("","");
+                    return fragment;
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 2 total pages.
+            return 2;
         }
 
         @Override
