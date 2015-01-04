@@ -64,7 +64,7 @@ public class LineChartFragment extends Fragment {
         }
         lineChart = (LineChart)getActivity().findViewById(R.id.linechart);
         lineChart.setDescription("For test");
-        
+
     }
 
     @Override
