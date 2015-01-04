@@ -1,6 +1,7 @@
 package com.hrw.ppsoc2.Fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.DropBoxManager;
@@ -15,9 +16,15 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.Legend;
+import com.github.mikephil.charting.utils.XLabels;
+import com.github.mikephil.charting.utils.YLabels;
+import com.hrw.ppsoc2.Activities.GraphicActivity;
 import com.hrw.ppsoc2.R;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -91,35 +98,65 @@ public class LineChartFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         lineChart = (LineChart) getView().findViewById(R.id.lineChart);
         if(lineChart != null) {
-            lineChart.setDescription("For test");
+            ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度");
+            lineChart.setDescription("");
+            lineChart.setDrawYValues(false);
+            lineChart.setTouchEnabled(true);
+            lineChart.setDragEnabled(true);
+            lineChart.setScaleEnabled(true);
+            lineChart.setPinchZoom(true);
+            lineChart.setYRange(1, 4, true);
+            lineChart.setDrawGridBackground(false);
+            lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
 
-            Entry c1e1 = new Entry(100.000f, 0);
-            Entry c1e2 = new Entry(50.000f, 1);
-            valsComp1.add(c1e1);
-            valsComp1.add(c1e2);
-            Entry c2e1 = new Entry(120.000f, 0);
-            Entry c2e2 = new Entry(110.000f, 1);
-            valsComp2.add(c2e1);
-            valsComp2.add(c2e2);
 
-            LineDataSet setComp1 = new LineDataSet(valsComp1, "Company 1");
-            LineDataSet setComp2 = new LineDataSet(valsComp2, "Company 2");
+            Random random = new Random();
+            Entry temp;
+            for(int i = 0; i< 10;i++){
+                temp = new Entry((float)(random.nextInt(4-0)+1),i);//(Y軸數值,X軸數值)
+                valsComp1.add(temp);
+            }
+            LineDataSet setComp1 = new LineDataSet(valsComp1, "DATA 1");
+
+            setComp1.setLineWidth(5f);
+            setComp1.setCircleSize(6f);
+            setComp1.setHighLightColor(Color.rgb(244, 117, 117));
+            setComp1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+            setComp1.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);
 
             ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
             dataSets.add(setComp1);
-            dataSets.add(setComp2);
+//            dataSets.add(setComp2);
 
             ArrayList<String> xVals = new ArrayList<String>();
-            xVals.add("1.Q");
-            xVals.add("2.Q");
-            xVals.add("3.Q");
-            xVals.add("4.Q");
+            /**
+             * X軸參數
+             */
+            for(int i = 0;i < valsComp1.size();i++){
+                xVals.add(i+1+"");
+            }
 
             LineData data = new LineData(xVals, dataSets);
 
             lineChart.setData(data);
+
+            Legend legend = lineChart.getLegend();
+            legend.setForm(Legend.LegendForm.SQUARE);
+            legend.setFormSize(6f);
+            legend.setTextColor(Color.WHITE);
+
+
+            XLabels x = lineChart.getXLabels();
+            x.setTextColor(Color.WHITE);
+
+            YLabels y = lineChart.getYLabels();
+            y.setTextColor(Color.WHITE);
+            y.setLabelCount(3);
+
+
+            lineChart.animateX(3000);
         } else {
-            Log.w("LineChart","is null");
+            Log.w("LineChart", "is null");
         }
 
     }

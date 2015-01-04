@@ -1,27 +1,21 @@
 package com.hrw.ppsoc2.Activities;
 
-import java.util.Locale;
-
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.hrw.ppsoc2.Fragments.BarChartFragment;
 import com.hrw.ppsoc2.Fragments.LineChartFragment;
 import com.hrw.ppsoc2.R;
+
+import java.util.Locale;
 
 
 public class GraphicActivity extends ActionBarActivity implements LineChartFragment.OnFragmentInteractionListener, BarChartFragment.OnFragmentInteractionListener{
@@ -45,7 +39,6 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphic);
-
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -131,6 +124,11 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
             }
             return null;
         }
+    }
+
+    public ActionBar getActionBars(){
+        ActionBar actionBar = getSupportActionBar();
+        return actionBar;
     }
 
 }
