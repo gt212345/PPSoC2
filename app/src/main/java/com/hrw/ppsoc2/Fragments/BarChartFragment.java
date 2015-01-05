@@ -3,11 +3,14 @@ package com.hrw.ppsoc2.Fragments;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.hrw.ppsoc2.Activities.GraphicActivity;
 import com.hrw.ppsoc2.R;
 
 /**
@@ -59,6 +62,7 @@ public class BarChartFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -72,6 +76,15 @@ public class BarChartFragment extends Fragment {
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        BarChart barChart = (BarChart)getView().findViewById(R.id.barchart);
+        if (barChart != null){
+            ((GraphicActivity)getActivity()).getActionBars().setTitle("變異度分析");
         }
     }
 
