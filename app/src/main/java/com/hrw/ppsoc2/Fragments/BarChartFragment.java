@@ -1,6 +1,7 @@
 package com.hrw.ppsoc2.Fragments;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,8 +11,16 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.utils.Legend;
+import com.github.mikephil.charting.utils.XLabels;
+import com.github.mikephil.charting.utils.YLabels;
 import com.hrw.ppsoc2.Activities.GraphicActivity;
 import com.hrw.ppsoc2.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,6 +35,8 @@ public class BarChartFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private BarChart barChart;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -62,7 +73,6 @@ public class BarChartFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
     }
 
     @Override
@@ -71,6 +81,8 @@ public class BarChartFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_bar_chart, container, false);
     }
+
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -82,9 +94,30 @@ public class BarChartFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        BarChart barChart = (BarChart)getView().findViewById(R.id.barchart);
+        barChart = (BarChart) getView().findViewById(R.id.barchart);
         if (barChart != null){
+            barChart.setDrawYValues(true);
+            barChart.setValueTextColor(Color.WHITE);
+            barChart.setDescription("");
+            barChart.setDrawHorizontalGrid(false);
+            barChart.setDrawVerticalGrid(false);
+            barChart.setDrawGridBackground(false);
+            barChart.setValueTextSize(10f);
+            barChart.setNoDataText("");
+        }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser && barChart != null){
+            setData(10,10);
+            barChart.animateXY(2000,2000);
             ((GraphicActivity)getActivity()).getActionBars().setTitle("變異度分析");
+        } else {
+            if(barChart != null) {
+                barChart.clear();
+            }
         }
     }
 
@@ -118,6 +151,42 @@ public class BarChartFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    private void setData(int count, float range) {
+
+        ArrayList<String> xVals = new ArrayList<String>();
+        for (int i = 0; i < count; i++) {
+            xVals.add(String.valueOf(i % 12));
+        }
+
+        ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
+
+        for (int i = 0; i < count; i++) {
+            float mult = (range + 1);
+            float val = (float) (Math.random() * mult);
+            yVals1.add(new BarEntry(val, i));
+        }
+
+        BarDataSet set1 = new BarDataSet(yVals1, "DataSet");
+        set1.setBarSpacePercent(35f);
+        set1.setHighLightColor(Color.WHITE);
+        set1.setBarShadowColor(getResources().getColor(R.color.background_material_dark));
+
+        ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
+        dataSets.add(set1);
+
+        BarData data = new BarData(xVals, dataSets);
+
+        XLabels x = barChart.getXLabels();
+        x.setTextColor(Color.WHITE);
+        YLabels y = barChart.getYLabels();
+        y.setTextColor(Color.WHITE);
+
+        Legend l = barChart.getLegend();
+        l.setTextColor(Color.WHITE);
+
+        barChart.setData(data);
     }
 
 }

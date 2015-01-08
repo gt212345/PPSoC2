@@ -98,7 +98,6 @@ public class LineChartFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         lineChart = (LineChart) getView().findViewById(R.id.lineChart);
         if(lineChart != null) {
-            ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度");
             lineChart.setDescription("");
             lineChart.setDrawYValues(false);
             lineChart.setTouchEnabled(true);
@@ -171,6 +170,7 @@ public class LineChartFragment extends Fragment {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             if(lineChart != null)lineChart.animateX(1500);
+            ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度");
         }
     }
 
