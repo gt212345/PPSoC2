@@ -15,12 +15,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.hrw.ppsoc2.Fragments.BarChartFragment;
 import com.hrw.ppsoc2.Fragments.LineChartFragment;
+import com.hrw.ppsoc2.Interface.ConnectListener;
 import com.hrw.ppsoc2.R;
 
 import java.io.IOException;
@@ -47,6 +50,11 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
      */
     ViewPager mViewPager;
 
+    /**
+     * Call back function for drawing charts
+     */
+    private ConnectListener connectListener;
+
     private InputStream inputStream;
     private Handler handler;
     private HandlerThread handlerThread;
@@ -56,6 +64,10 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     private ProgressDialog progressDialog;
 
     private String TAG = "GraphicActivity";
+
+    public void callAfterConnected(ConnectListener connectListener) {
+        connectListener.doAfterConnected();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +81,8 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        connectListener = new LineChartFragment();
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         handlerThread = new HandlerThread("ConnectBT");
@@ -188,8 +202,14 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                         }
                     });
                     break;
+                } else {
+                    progressDialog.cancel();
+                    Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
                 }
             }
+        } else {
+            progressDialog.cancel();
+            Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -206,8 +226,12 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 Log.w(TAG, "Device connected with standard method");
                 inputStream = bluetoothSocket.getInputStream();
                 progressDialog.cancel();
+                Toast.makeText(this,"Connected",Toast.LENGTH_SHORT).show();
+                callAfterConnected(connectListener);
             }
         } catch (IOException e) {
+            progressDialog.cancel();
+            Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
             Log.e(TAG,e.toString());
         }
     }

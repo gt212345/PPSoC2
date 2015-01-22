@@ -18,6 +18,7 @@ import com.github.mikephil.charting.utils.Legend;
 import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
 import com.hrw.ppsoc2.Activities.GraphicActivity;
+import com.hrw.ppsoc2.Interface.ConnectListener;
 import com.hrw.ppsoc2.R;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import java.util.ArrayList;
  * Use the {@link BarChartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BarChartFragment extends Fragment {
+public class BarChartFragment extends Fragment implements ConnectListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -110,10 +111,11 @@ public class BarChartFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && barChart != null){
-            setData(10,10);
-            barChart.animateXY(2000,2000);
+        if(isVisibleToUser){
             ((GraphicActivity)getActivity()).getActionBars().setTitle("變異度分析");
+        }
+        if (isVisibleToUser && barChart.getData() != null){
+            barChart.animateXY(2000,2000);
         } else {
             if(barChart != null) {
                 barChart.clear();
@@ -182,11 +184,15 @@ public class BarChartFragment extends Fragment {
         x.setTextColor(Color.WHITE);
         YLabels y = barChart.getYLabels();
         y.setTextColor(Color.WHITE);
-
-        Legend l = barChart.getLegend();
-        l.setTextColor(Color.WHITE);
-
         barChart.setData(data);
+        Legend legend = barChart.getLegend();
+        legend.setTextColor(Color.WHITE);
     }
+
+    @Override
+    public void doAfterConnected() {
+        setData(10,10);
+    }
+
 
 }
