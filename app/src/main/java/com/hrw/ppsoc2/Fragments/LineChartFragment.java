@@ -23,6 +23,7 @@ import com.github.mikephil.charting.utils.YLabels;
 import com.hrw.ppsoc2.Activities.GraphicActivity;
 import com.hrw.ppsoc2.R;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -43,6 +44,8 @@ public class LineChartFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private InputStream inputStream;
 
     private LineChart lineChart;
 
@@ -82,6 +85,7 @@ public class LineChartFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            if(getInputStream() != null)this.inputStream = getInputStream();
         }
 
     }
@@ -211,6 +215,10 @@ public class LineChartFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    private InputStream getInputStream() {
+        return ((GraphicActivity)getActivity()).getInputStream();
     }
 
 }
