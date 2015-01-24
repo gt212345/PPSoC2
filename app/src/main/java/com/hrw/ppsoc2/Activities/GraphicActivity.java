@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.hrw.ppsoc2.Fragments.BarChartFragment;
 import com.hrw.ppsoc2.Fragments.LineChartFragment;
+import com.hrw.ppsoc2.Fragments.PieChartFragment;
 import com.hrw.ppsoc2.Interface.ConnectListener;
 import com.hrw.ppsoc2.R;
 
@@ -33,7 +34,8 @@ import java.util.Set;
 import java.util.UUID;
 
 
-public class GraphicActivity extends ActionBarActivity implements LineChartFragment.OnFragmentInteractionListener, BarChartFragment.OnFragmentInteractionListener{
+public class GraphicActivity extends ActionBarActivity implements LineChartFragment.OnFragmentInteractionListener,
+        BarChartFragment.OnFragmentInteractionListener, PieChartFragment.OnFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -157,14 +159,16 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 case 1:
                     fragment = BarChartFragment.newInstance("","");
                     return fragment;
+                case 2:
+                    fragment = PieChartFragment.newInstance("","");
+                    return fragment;
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            // Show 2 total pages.
-            return 2;
+            return 3;
         }
 
         @Override
