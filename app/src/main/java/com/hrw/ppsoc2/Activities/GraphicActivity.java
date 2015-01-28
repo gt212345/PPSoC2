@@ -206,7 +206,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 .getBondedDevices();
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
-                if (device.getName().equals("spp")) {
+                if (device.getName().equals("Spp")) {
                     bluetoothDevice = device;
                     handler.post(new Runnable() {
                         @Override
