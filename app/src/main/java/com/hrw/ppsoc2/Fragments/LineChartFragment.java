@@ -49,9 +49,6 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     public LineChart lineChart;
     public List<Integer> xData;
-
-    private View rootView;
-
     private String TAG = "LineChartFragment";
 
     /**
@@ -91,21 +88,15 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //xData = new ArrayList<>();
-        Log.w(TAG,"onCreate");
+        xData = new ArrayList<>();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if (container == null || inflater == null) {
-            Log.e(TAG, "GG");
-        }
-        else {
-            rootView = inflater.inflate(R.layout.fragment_line_chart, container, false);
-        }
-        return rootView;
+        View v = inflater.inflate(R.layout.fragment_line_chart, container, false);
+        return v;
     }
 
     @Override
@@ -169,87 +160,70 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input) {
-        if(xData == null){
-            xData = new ArrayList<>();
-            Log.w(TAG,"xData new");
-        }
-        Log.e(TAG, "input: " + input.length);
-        int temp = input[4];
-        xData.add(temp);
+        xData.add((int)input[4]);
         drawLineChart(input);
     }
 
 
 
     private void drawLineChart(byte[] input) {
-//        if(lineChart != null) {
         if(lineChart == null){
             setUpChart();
         }
-            Entry temp;
-            for(int i = 0; i < xData.size();i++){
-                temp = new Entry(xData.get(i),i);//(Y軸數值,X軸數值)
-                valsComp1.add(temp);
-            }
-            LineDataSet setComp1 = new LineDataSet(valsComp1, "嚴重度");
+        Entry temp;
+        for(int i = 0; i < xData.size();i++){
+            temp = new Entry(xData.get(i),i);//(Y軸數值,項數)
+            valsComp1.add(temp);
+        }
+        LineDataSet setComp1 = new LineDataSet(valsComp1, "嚴重度");
 
 //            setComp1.setDrawCubic(true);
 //            setComp1.setDrawCircles(false);
-            setComp1.setLineWidth(5f);
-            setComp1.setCircleSize(6f);
-            setComp1.setHighLightColor(Color.rgb(244, 117, 117));
-            setComp1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-            setComp1.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+        setComp1.setLineWidth(5f);
+        setComp1.setCircleSize(6f);
+        setComp1.setHighLightColor(Color.rgb(244, 117, 117));
+        setComp1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+        setComp1.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);
 
-            ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-            dataSets.add(setComp1);
+        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
+        dataSets.add(setComp1);
 //            dataSets.add(setComp2);
 
-            ArrayList<String> xVals = new ArrayList<String>();
-            /**
-             * X軸參數
-             */
-            for(int i = 0;i < valsComp1.size();i++){
-                xVals.add(i+1+" m");
+        ArrayList<String> xVals = new ArrayList<String>();
+        /**
+         * X軸參數
+         */
+        for(int i = 0;i < valsComp1.size();i++){
+            xVals.add(i+1+" m");
+        }
+
+        LineData data = new LineData(xVals, dataSets);
+
+        lineChart.setData(data);
+
+        Legend legend = lineChart.getLegend();
+        legend.setForm(Legend.LegendForm.SQUARE);
+        legend.setFormSize(6f);
+        legend.setTextColor(Color.WHITE);
+
+
+        XLabels x = lineChart.getXLabels();
+        x.setTextColor(Color.WHITE);
+
+        YLabels y = lineChart.getYLabels();
+        y.setTextColor(Color.WHITE);
+        y.setLabelCount(3);
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                lineChart.animateX(500);
             }
-
-            LineData data = new LineData(xVals, dataSets);
-
-            lineChart.setData(data);
-
-            Legend legend = lineChart.getLegend();
-            legend.setForm(Legend.LegendForm.SQUARE);
-            legend.setFormSize(6f);
-            legend.setTextColor(Color.WHITE);
-
-
-            XLabels x = lineChart.getXLabels();
-            x.setTextColor(Color.WHITE);
-
-            YLabels y = lineChart.getYLabels();
-            y.setTextColor(Color.WHITE);
-            y.setLabelCount(3);
-
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    lineChart.animateX(500);
-                }
-            });
-
-//        } else {
-//            Log.w("LineChart", "is null");
-//        }
+        });
     }
 
     private void setUpChart(){
-        if (rootView == null) {
-            Log.e(TAG, "rootView GG");
-        }
-        else {
-            lineChart = (LineChart) rootView.findViewById(R.id.lineChart);
-        }
-
+        lineChart = (LineChart) getView().findViewById(R.id.lineChart);
         if(lineChart != null) {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -268,10 +242,6 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                     lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
                 }
             });
-            Log.w(TAG,"LineChart init");
-        }
-        else {
-            Log.w(TAG,"LineChart init GG");
         }
     }
 
