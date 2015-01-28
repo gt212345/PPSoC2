@@ -99,17 +99,31 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         handlerThread = new HandlerThread("ConnectBT");
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
-        progressDialog = ProgressDialog.show(this,"Please wait","Connecting",true);
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                if(bluetoothSocket == null){
-                    findBT();
-                }
-            }
-        });
+//        progressDialog = ProgressDialog.show(this,"Please wait","Connecting",true);
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                if(bluetoothSocket == null){
+//                    findBT();
+//                }
+//            }
+//        });
+        dataListener = new LineChartFragment();
+        handler.postDelayed(test,2000);
+        handler.postDelayed(test,4000);
+        handler.postDelayed(test,6000);
+        handler.postDelayed(test,8000);
+        handler.postDelayed(test,10000);
 
     }
+
+    Runnable test = new Runnable() {
+        @Override
+        public void run() {
+            byte[] temp = new byte[]{-86, -86, 1,1,3};
+            callAfterDataReceived(dataListener,temp);
+        }
+    };
 
 
     @Override
@@ -164,6 +178,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
             switch (position){
                 case 0:
                     fragment = LineChartFragment.newInstance("","");
+                    dataListener = (LineChartFragment)fragment;
                     return fragment;
                 case 1:
                     fragment = PieChartFragment.newInstance("","");
@@ -172,6 +187,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                     fragment = BarChartFragment.newInstance("","");
                     return fragment;
             }
+            Log.e(TAG, "getItem GG");
             return null;
         }
 
@@ -259,7 +275,6 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
 
     private void receiveData() throws IOException {
         Log.w(TAG,"receiveData called");
-        dataListener = new LineChartFragment();
         while (true) {
             if (inputStream.available() >= 15) {
                 input = new byte[15];

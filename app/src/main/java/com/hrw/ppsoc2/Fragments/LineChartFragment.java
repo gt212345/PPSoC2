@@ -27,6 +27,7 @@ import com.hrw.ppsoc2.R;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,8 +47,10 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
     private String mParam1;
     private String mParam2;
 
-    private LineChart lineChart;
-    private ArrayList<Integer> xData;
+    public LineChart lineChart;
+    public List<Integer> xData;
+
+    private View rootView;
 
     private String TAG = "LineChartFragment";
 
@@ -88,21 +91,27 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        xData = new ArrayList<>();
+        //xData = new ArrayList<>();
+        Log.w(TAG,"onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_line_chart, container, false);
-        return v;
+        if (container == null || inflater == null) {
+            Log.e(TAG, "GG");
+        }
+        else {
+            rootView = inflater.inflate(R.layout.fragment_line_chart, container, false);
+        }
+        return rootView;
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setUpChart();
+        //setUpChart();
     }
 
     @Override
@@ -160,7 +169,13 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input) {
-        xData.add((int)input[4]);
+        if(xData == null){
+            xData = new ArrayList<>();
+            Log.w(TAG,"xData new");
+        }
+        Log.e(TAG, "input: " + input.length);
+        int temp = input[4];
+        xData.add(temp);
         drawLineChart(input);
     }
 
@@ -168,6 +183,9 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     private void drawLineChart(byte[] input) {
 //        if(lineChart != null) {
+        if(lineChart == null){
+            setUpChart();
+        }
             Entry temp;
             for(int i = 0; i < xData.size();i++){
                 temp = new Entry(xData.get(i),i);//(Y軸數值,X軸數值)
@@ -212,29 +230,48 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             y.setTextColor(Color.WHITE);
             y.setLabelCount(3);
 
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    lineChart.animateX(500);
+                }
+            });
 
-            lineChart.animateX(500);
 //        } else {
 //            Log.w("LineChart", "is null");
 //        }
     }
 
     private void setUpChart(){
-        lineChart = (LineChart) getView().findViewById(R.id.linechart);
+        if (rootView == null) {
+            Log.e(TAG, "rootView GG");
+        }
+        else {
+            lineChart = (LineChart) rootView.findViewById(R.id.lineChart);
+        }
+
         if(lineChart != null) {
-            lineChart.setNoDataText("");
-            lineChart.setDescription("");
-            lineChart.setDrawYValues(false);
-            lineChart.setTouchEnabled(true);
-            lineChart.setDragEnabled(true);
-            lineChart.setScaleEnabled(true);
-            lineChart.setPinchZoom(true);
-            lineChart.setYRange(0, 3, true);
-            lineChart.setDrawGridBackground(false);
-            lineChart.setDrawHorizontalGrid(false);
-            lineChart.setDrawVerticalGrid(false);
-            lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    lineChart.setNoDataText("");
+                    lineChart.setDescription("");
+                    lineChart.setDrawYValues(false);
+                    lineChart.setTouchEnabled(true);
+                    lineChart.setDragEnabled(true);
+                    lineChart.setScaleEnabled(true);
+                    lineChart.setPinchZoom(true);
+                    lineChart.setYRange(0, 3, true);
+                    lineChart.setDrawGridBackground(false);
+                    lineChart.setDrawHorizontalGrid(false);
+                    lineChart.setDrawVerticalGrid(false);
+                    lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
+                }
+            });
             Log.w(TAG,"LineChart init");
+        }
+        else {
+            Log.w(TAG,"LineChart init GG");
         }
     }
 
