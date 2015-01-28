@@ -259,6 +259,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
 
     private void receiveData() throws IOException {
         Log.w(TAG,"receiveData called");
+        Log.w(TAG,"Data available :"+String.valueOf(inputStream.available()));
         if(inputStream.available() >= 15) {
             Log.w(TAG,"Data available");
             input = new byte[15];
