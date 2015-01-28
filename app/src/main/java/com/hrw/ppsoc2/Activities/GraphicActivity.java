@@ -251,7 +251,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         } catch (IOException e) {
             progressDialog.cancel();
             Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
-            Log.e(TAG,e.toString());
+            Log.w(TAG,e.toString());
         }
     }
 
