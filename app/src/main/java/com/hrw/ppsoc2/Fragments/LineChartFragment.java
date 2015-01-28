@@ -98,6 +98,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setUpChart();
     }
 
     @Override
@@ -148,21 +149,18 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
         public void onFragmentInteraction(Uri uri);
     }
 
-    private InputStream getInputStream() {
-        return ((GraphicActivity)getActivity()).getInputStream();
-    }
-
     @Override
     public void doAfterConnected() {
-        setUpChart();
     }
 
 
     @Override
     public void doAfterDataReceived(byte[] input) {
-        xData = new ArrayList<>();
-        xData.add((int)input[4]);
-        drawLineChart(input);
+        if(lineChart != null) {
+            xData = new ArrayList<>();
+            xData.add((int) input[4]);
+            drawLineChart(input);
+        }
     }
 
 
@@ -234,7 +232,6 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             lineChart.setDrawGridBackground(false);
             lineChart.setDrawHorizontalGrid(false);
             lineChart.setDrawVerticalGrid(false);
-
             lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
         }
     }
