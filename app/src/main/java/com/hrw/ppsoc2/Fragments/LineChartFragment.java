@@ -95,14 +95,13 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_line_chart, container, false);
-        setUpChart();
         return v;
     }
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            if(lineChart != null)lineChart.animateX(1500);
+            if(lineChart != null)lineChart.animateX(500);
             ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度");
         }
     }
@@ -153,6 +152,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input) {
+        setUpChart();
         if(lineChart != null) {
             xData = new ArrayList<>();
             xData.add((int) input[4]);
