@@ -97,6 +97,13 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
         View v = inflater.inflate(R.layout.fragment_line_chart, container, false);
         return v;
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setUpChart();
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -152,7 +159,6 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input) {
-        setUpChart();
         if(lineChart != null) {
             xData = new ArrayList<>();
             xData.add((int) input[4]);
@@ -232,6 +238,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             lineChart.setDrawHorizontalGrid(false);
             lineChart.setDrawVerticalGrid(false);
             lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
+            Log.w(TAG,"LineChart init");
         }
     }
 
