@@ -218,11 +218,13 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 } else {
                     progressDialog.cancel();
                     Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
+                    Log.w(TAG,"no spp match");
                 }
             }
         } else {
             progressDialog.cancel();
             Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
+            Log.w(TAG,"no paired device");
         }
     }
 
