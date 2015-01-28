@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.PieChart;
 import com.hrw.ppsoc2.Interface.ConnectListener;
+import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
 
 /**
@@ -22,7 +23,7 @@ import com.hrw.ppsoc2.R;
  * Use the {@link PieChartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PieChartFragment extends Fragment implements ConnectListener {
+public class PieChartFragment extends Fragment implements ConnectListener, DataListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -112,13 +113,6 @@ public class PieChartFragment extends Fragment implements ConnectListener {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        pieChart = (PieChart) getView().findViewById(R.id.piechart);
-        if(pieChart != null) {
-            pieChart.setHoleColor(Color.rgb(235, 235, 235));
-            pieChart.setDescription("");
-            pieChart.setNoDataText("");
-            pieChart.setCenterText("變異度分析");
-        }
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -127,12 +121,31 @@ public class PieChartFragment extends Fragment implements ConnectListener {
 
     private void setData() {
         // TODO: Fill blank setData method
+        if(pieChart == null) {
+            setUpChart();
+        }
     }
 
     @Override
     public void doAfterConnected() {
         setData();
     }
+
+    @Override
+    public void doAfterDataReceived(byte[] input) {
+
+    }
+
+    private void setUpChart(){
+        pieChart = (PieChart) getView().findViewById(R.id.piechart);
+        if(pieChart != null) {
+            pieChart.setHoleColor(Color.rgb(235, 235, 235));
+            pieChart.setDescription("");
+            pieChart.setNoDataText("");
+            pieChart.setCenterText("變異度分析");
+        }
+    }
+
 
 
 }

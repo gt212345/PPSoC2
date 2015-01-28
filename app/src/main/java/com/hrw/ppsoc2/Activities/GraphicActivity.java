@@ -57,7 +57,9 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     /**
      * Call back function for drawing charts
      */
-    private ConnectListener connectListener;
+    private ConnectListener connectListenerLin;
+    private ConnectListener connectListenerPie;
+    private ConnectListener connectListenerBar;
 
     private InputStream inputStream;
     private Handler handler;
@@ -67,7 +69,9 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     private BluetoothSocket bluetoothSocket;
     private ProgressDialog progressDialog;
 
-    private DataListener dataListener;
+    private DataListener dataListenerLin;
+    private DataListener dataListenerPie;
+    private DataListener dataListenerBar;
 
     private byte[] input;
 
@@ -99,32 +103,16 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         handlerThread = new HandlerThread("ConnectBT");
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
-//        progressDialog = ProgressDialog.show(this,"Please wait","Connecting",true);
-//        handler.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                if(bluetoothSocket == null){
-//                    findBT();
-//                }
-//            }
-//        });
-        dataListener = new LineChartFragment();
-        handler.postDelayed(test,2000);
-        handler.postDelayed(test,4000);
-        handler.postDelayed(test,6000);
-        handler.postDelayed(test,8000);
-        handler.postDelayed(test,10000);
-
+        progressDialog = ProgressDialog.show(this,"Please wait","Connecting",true);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if(bluetoothSocket == null){
+                    findBT();
+                }
+            }
+        });
     }
-
-    Runnable test = new Runnable() {
-        @Override
-        public void run() {
-            byte[] temp = new byte[]{-86, -86, 1,1,3};
-            callAfterDataReceived(dataListener,temp);
-        }
-    };
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -160,12 +148,6 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        @Override
-        public void startUpdate(ViewGroup container) {
-            super.startUpdate(container);
-
-        }
-
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -178,16 +160,20 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
             switch (position){
                 case 0:
                     fragment = LineChartFragment.newInstance("","");
-                    dataListener = (LineChartFragment)fragment;
+                    dataListenerLin = (LineChartFragment)fragment;
+                    connectListenerLin = (LineChartFragment)fragment;
                     return fragment;
                 case 1:
                     fragment = PieChartFragment.newInstance("","");
+                    dataListenerPie = (PieChartFragment)fragment;
+                    connectListenerPie = (PieChartFragment)fragment;
                     return fragment;
                 case 2:
                     fragment = BarChartFragment.newInstance("","");
+                    dataListenerBar = (BarChartFragment)fragment;
+                    connectListenerBar = (BarChartFragment)fragment;
                     return fragment;
             }
-            Log.e(TAG, "getItem GG");
             return null;
         }
 
@@ -258,12 +244,6 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 inputStream = bluetoothSocket.getInputStream();
                 progressDialog.cancel();
                 Toast.makeText(this,"Connected",Toast.LENGTH_SHORT).show();
-                connectListener = new LineChartFragment();
-                callAfterConnected(connectListener);
-                connectListener = new PieChartFragment();
-                callAfterConnected(connectListener);
-//                connectListener = new BarChartFragment();
-//                callAfterConnected(connectListener);
                 receiveData();
             }
         } catch (IOException e) {
@@ -282,7 +262,9 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 Log.w(TAG, "Data available, header: "+input[0]+"and "+input[1]);
                 if (input[0] == -86/* && input[1] == -86*/) {
                     Log.w(TAG, "Data header confirmed");
-                    callAfterDataReceived(dataListener, input);
+                    callAfterDataReceived(dataListenerLin, input);
+                    callAfterDataReceived(dataListenerPie,input);
+                    callAfterDataReceived(dataListenerBar,input);
                 }
             }
         }

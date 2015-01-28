@@ -54,7 +54,6 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
     /**
      * Data structure
      */
-    private ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
     private ArrayList<Entry> valsComp2 = new ArrayList<Entry>();
 
     private OnFragmentInteractionListener mListener;
@@ -171,6 +170,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             setUpChart();
         }
         Entry temp;
+        ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
         for(int i = 0; i < xData.size();i++){
             temp = new Entry(xData.get(i),i);//(Y軸數值,項數)
             valsComp1.add(temp);
@@ -194,7 +194,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
          * X軸參數
          */
         for(int i = 0;i < valsComp1.size();i++){
-            xVals.add(i+1+" m");
+            xVals.add((i+1)+" m");
         }
 
         LineData data = new LineData(xVals, dataSets);

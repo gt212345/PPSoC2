@@ -19,6 +19,7 @@ import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
 import com.hrw.ppsoc2.Activities.GraphicActivity;
 import com.hrw.ppsoc2.Interface.ConnectListener;
+import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
  * Use the {@link BarChartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BarChartFragment extends Fragment implements ConnectListener {
+public class BarChartFragment extends Fragment implements ConnectListener, DataListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -93,31 +94,15 @@ public class BarChartFragment extends Fragment implements ConnectListener {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        barChart = (BarChart) getView().findViewById(R.id.barchart);
-        if (barChart != null){
-            barChart.setDrawYValues(true);
-            barChart.setValueTextColor(Color.WHITE);
-            barChart.setDescription("");
-            barChart.setDrawHorizontalGrid(false);
-            barChart.setDrawVerticalGrid(false);
-            barChart.setDrawGridBackground(false);
-            barChart.setValueTextSize(10f);
-            barChart.setNoDataText("");
-        }
-    }
-
-    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             ((GraphicActivity)getActivity()).getActionBars().setTitle("變異度分析");
         }
-        if (isVisibleToUser && barChart.getData() != null){
-            barChart.animateXY(2000,2000);
-        } else {
-            if(barChart != null) {
+        if(barChart != null) {
+            if (isVisibleToUser && barChart.getData() != null) {
+                barChart.animateXY(2000, 2000);
+            } else {
                 barChart.clear();
             }
         }
@@ -155,8 +140,20 @@ public class BarChartFragment extends Fragment implements ConnectListener {
         public void onFragmentInteraction(Uri uri);
     }
 
-    private void setData(int count, float range) {
+    @Override
+    public void doAfterConnected() {
+    }
 
+
+    @Override
+    public void doAfterDataReceived(byte[] input) {
+        setData(10,10);
+    }
+
+    private void setData(int count, float range) {
+        if (barChart == null) {
+            setUpChart();
+        }
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < count; i++) {
             xVals.add(String.valueOf(i % 12));
@@ -189,10 +186,18 @@ public class BarChartFragment extends Fragment implements ConnectListener {
         legend.setTextColor(Color.WHITE);
     }
 
-    @Override
-    public void doAfterConnected() {
-        setData(10,10);
+    private void setUpChart() {
+        barChart = (BarChart) getView().findViewById(R.id.barchart);
+        if (barChart != null){
+            barChart.setDrawYValues(true);
+            barChart.setValueTextColor(Color.WHITE);
+            barChart.setDescription("");
+            barChart.setDrawHorizontalGrid(false);
+            barChart.setDrawVerticalGrid(false);
+            barChart.setDrawGridBackground(false);
+            barChart.setValueTextSize(10f);
+            barChart.setNoDataText("");
+        }
     }
-
 
 }
