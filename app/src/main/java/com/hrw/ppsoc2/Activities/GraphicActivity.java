@@ -259,6 +259,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
 
     private void receiveData() throws IOException {
         Log.w(TAG,"receiveData called");
+        dataListener = new LineChartFragment();
         while (true) {
             if (inputStream.available() >= 15) {
                 input = new byte[15];
@@ -266,7 +267,6 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 Log.w(TAG, "Data available, header: "+input[0]+"and "+input[1]);
                 if (input[0] == -86 && input[1] == -86) {
                     Log.w(TAG, "Data header confirmed");
-                    dataListener = new LineChartFragment();
                     callAfterDataReceived(dataListener, input);
                 }
             }

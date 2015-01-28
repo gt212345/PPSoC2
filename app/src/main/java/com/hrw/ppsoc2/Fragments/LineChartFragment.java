@@ -49,6 +49,8 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
     private LineChart lineChart;
     private ArrayList<Integer> xData;
 
+    private String TAG = "LineChartFragment";
+
     /**
      * Data structure
      */
@@ -160,6 +162,8 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             xData = new ArrayList<>();
             xData.add((int) input[4]);
             drawLineChart(input);
+        } else {
+            Log.w(TAG,"LineChart = null");
         }
     }
 
