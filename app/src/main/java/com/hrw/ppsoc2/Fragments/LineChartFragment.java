@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -21,11 +22,11 @@ import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
 import com.hrw.ppsoc2.Activities.GraphicActivity;
 import com.hrw.ppsoc2.Interface.ConnectListener;
+import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -35,7 +36,7 @@ import java.util.Random;
  * Use the {@link LineChartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LineChartFragment extends Fragment implements ConnectListener {
+public class LineChartFragment extends Fragment implements ConnectListener, DataListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -45,9 +46,8 @@ public class LineChartFragment extends Fragment implements ConnectListener {
     private String mParam1;
     private String mParam2;
 
-    private InputStream inputStream;
-
     private LineChart lineChart;
+    private ArrayList<Integer> xData;
 
     /**
      * Data structure
@@ -86,7 +86,6 @@ public class LineChartFragment extends Fragment implements ConnectListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        if(getInputStream() != null)this.inputStream = getInputStream();
     }
 
     @Override
@@ -172,20 +171,25 @@ public class LineChartFragment extends Fragment implements ConnectListener {
 
     @Override
     public void doAfterConnected() {
-        drawLineChart();
     }
 
 
-    private void drawLineChart() {
-        if(lineChart != null) {
+    @Override
+    public void doAfterDataReceived(byte[] input) {
+        xData.add((int)input[4]);
+        drawLineChart(input);
+    }
 
-            Random random = new Random();
+
+
+    private void drawLineChart(byte[] input) {
+        if(lineChart != null) {
             Entry temp;
-            for(int i = 0; i< 10;i++){
-                temp = new Entry((float)(random.nextInt(4-0)),i);//(Y軸數值,X軸數值)
+            for(int i = 0; i < xData.size();i++){
+                temp = new Entry(xData.get(0),i);//(Y軸數值,X軸數值)
                 valsComp1.add(temp);
             }
-            LineDataSet setComp1 = new LineDataSet(valsComp1, "DATA 1");
+            LineDataSet setComp1 = new LineDataSet(valsComp1, "嚴重度");
 
 //            setComp1.setDrawCubic(true);
 //            setComp1.setDrawCircles(false);
@@ -225,7 +229,7 @@ public class LineChartFragment extends Fragment implements ConnectListener {
             y.setLabelCount(3);
 
 
-            lineChart.animateX(1500);
+            lineChart.animateX(500);
         } else {
             Log.w("LineChart", "is null");
         }

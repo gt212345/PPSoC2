@@ -25,10 +25,12 @@ import com.hrw.ppsoc2.Fragments.BarChartFragment;
 import com.hrw.ppsoc2.Fragments.LineChartFragment;
 import com.hrw.ppsoc2.Fragments.PieChartFragment;
 import com.hrw.ppsoc2.Interface.ConnectListener;
+import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -65,10 +67,18 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     private BluetoothSocket bluetoothSocket;
     private ProgressDialog progressDialog;
 
+    private DataListener dataListener;
+
+    private byte[] input;
+
     private String TAG = "GraphicActivity";
 
     public void callAfterConnected(ConnectListener connectListener) {
         connectListener.doAfterConnected();
+    }
+
+    private void callAfterDataReceived(DataListener dataListener,byte[] input) {
+        dataListener.doAfterDataReceived(input);
     }
 
     @Override
@@ -84,7 +94,6 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        connectListener = new LineChartFragment();
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         handlerThread = new HandlerThread("ConnectBT");
@@ -231,12 +240,29 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 inputStream = bluetoothSocket.getInputStream();
                 progressDialog.cancel();
                 Toast.makeText(this,"Connected",Toast.LENGTH_SHORT).show();
+                connectListener = new LineChartFragment();
                 callAfterConnected(connectListener);
+                connectListener = new PieChartFragment();
+                callAfterConnected(connectListener);
+                connectListener = new BarChartFragment();
+                callAfterConnected(connectListener);
+                receiveData();
             }
         } catch (IOException e) {
             progressDialog.cancel();
             Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
             Log.e(TAG,e.toString());
+        }
+    }
+
+    private void receiveData() throws IOException {
+        if(inputStream.available() >= 15) {
+            input = new byte[15];
+            inputStream.read(input);
+            if(input[0] == 0xaa && input[1] == 0xaa){
+                dataListener = new LineChartFragment();
+                callAfterDataReceived(dataListener,input);
+            }
         }
     }
 

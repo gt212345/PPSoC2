@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.hrw.ppsoc2.R;
 
-import java.util.logging.Handler;
 
 
 public class BTConnectActivity extends ActionBarActivity {
