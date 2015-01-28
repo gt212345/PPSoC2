@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,17 +61,6 @@ public class PieChartFragment extends Fragment implements ConnectListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        pieChart = (PieChart) getView().findViewById(R.id.piechart);
-        if(pieChart != null) {
-            pieChart.setHoleColor(Color.rgb(235, 235, 235));
-            pieChart.setDescription("");
-            pieChart.setNoDataText("");
-            pieChart.setCenterText("變異度分析");
-        }
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -117,6 +107,22 @@ public class PieChartFragment extends Fragment implements ConnectListener {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        pieChart = (PieChart) getView().findViewById(R.id.piechart);
+        if(pieChart != null) {
+            pieChart.setHoleColor(Color.rgb(235, 235, 235));
+            pieChart.setDescription("");
+            pieChart.setNoDataText("");
+            pieChart.setCenterText("變異度分析");
+        }
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     private void setData() {

@@ -157,10 +157,10 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                     fragment = LineChartFragment.newInstance("","");
                     return fragment;
                 case 1:
-                    fragment = BarChartFragment.newInstance("","");
+                    fragment = PieChartFragment.newInstance("","");
                     return fragment;
                 case 2:
-                    fragment = PieChartFragment.newInstance("","");
+                    fragment = BarChartFragment.newInstance("","");
                     return fragment;
             }
             return null;
