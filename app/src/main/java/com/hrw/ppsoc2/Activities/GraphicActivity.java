@@ -246,8 +246,8 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 callAfterConnected(connectListener);
                 connectListener = new PieChartFragment();
                 callAfterConnected(connectListener);
-                connectListener = new BarChartFragment();
-                callAfterConnected(connectListener);
+//                connectListener = new BarChartFragment();
+//                callAfterConnected(connectListener);
                 receiveData();
             }
         } catch (IOException e) {
