@@ -98,23 +98,6 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        lineChart = (LineChart) getView().findViewById(R.id.lineChart);
-        if(lineChart != null) {
-            lineChart.setNoDataText("");
-            lineChart.setDescription("");
-            lineChart.setDrawYValues(false);
-            lineChart.setTouchEnabled(true);
-            lineChart.setDragEnabled(true);
-            lineChart.setScaleEnabled(true);
-            lineChart.setPinchZoom(true);
-            lineChart.setYRange(0, 3, true);
-            lineChart.setDrawGridBackground(false);
-            lineChart.setDrawHorizontalGrid(false);
-            lineChart.setDrawVerticalGrid(false);
-
-            lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
-        }
-
     }
 
     @Override
@@ -171,6 +154,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterConnected() {
+        setUpChart();
     }
 
 
@@ -233,6 +217,25 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             lineChart.animateX(500);
         } else {
             Log.w("LineChart", "is null");
+        }
+    }
+
+    private void setUpChart(){
+        lineChart = (LineChart) getView().findViewById(R.id.lineChart);
+        if(lineChart != null) {
+            lineChart.setNoDataText("");
+            lineChart.setDescription("");
+            lineChart.setDrawYValues(false);
+            lineChart.setTouchEnabled(true);
+            lineChart.setDragEnabled(true);
+            lineChart.setScaleEnabled(true);
+            lineChart.setPinchZoom(true);
+            lineChart.setYRange(0, 3, true);
+            lineChart.setDrawGridBackground(false);
+            lineChart.setDrawHorizontalGrid(false);
+            lineChart.setDrawVerticalGrid(false);
+
+            lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
         }
     }
 
