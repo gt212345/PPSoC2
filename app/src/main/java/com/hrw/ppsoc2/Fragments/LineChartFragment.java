@@ -159,13 +159,9 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input) {
-        if(lineChart != null) {
-            xData = new ArrayList<>();
-            xData.add((int) input[4]);
-            drawLineChart(input);
-        } else {
-            Log.w(TAG,"LineChart = null");
-        }
+        xData = new ArrayList<>();
+        xData.add((int) input[4]);
+        drawLineChart(input);
     }
 
 
