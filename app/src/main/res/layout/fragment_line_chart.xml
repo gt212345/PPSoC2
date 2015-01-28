@@ -3,7 +3,7 @@
     android:layout_height="match_parent"  tools:context=".BTConnectActivity">
 
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
+        android:id="@+id/linechart"
         android:background="@color/background_material_dark"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

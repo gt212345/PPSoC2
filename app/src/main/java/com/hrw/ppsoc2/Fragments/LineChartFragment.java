@@ -88,6 +88,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        xData = new ArrayList<>();
     }
 
     @Override
@@ -159,18 +160,17 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input) {
-        xData = new ArrayList<>();
-        xData.add((int) input[4]);
+        xData.add((int)input[4]);
         drawLineChart(input);
     }
 
 
 
     private void drawLineChart(byte[] input) {
-        if(lineChart != null) {
+//        if(lineChart != null) {
             Entry temp;
             for(int i = 0; i < xData.size();i++){
-                temp = new Entry(xData.get(0),i);//(Y軸數值,X軸數值)
+                temp = new Entry(xData.get(i),i);//(Y軸數值,X軸數值)
                 valsComp1.add(temp);
             }
             LineDataSet setComp1 = new LineDataSet(valsComp1, "嚴重度");
@@ -214,13 +214,13 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
 
             lineChart.animateX(500);
-        } else {
-            Log.w("LineChart", "is null");
-        }
+//        } else {
+//            Log.w("LineChart", "is null");
+//        }
     }
 
     private void setUpChart(){
-        lineChart = (LineChart) getView().findViewById(R.id.lineChart);
+        lineChart = (LineChart) getView().findViewById(R.id.linechart);
         if(lineChart != null) {
             lineChart.setNoDataText("");
             lineChart.setDescription("");
