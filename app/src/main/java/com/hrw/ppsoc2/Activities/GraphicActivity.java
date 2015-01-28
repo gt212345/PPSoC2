@@ -227,10 +227,10 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     }
 
     private void openBT() {
-//        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // Standard
+        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB"); // Standard
         // SerialPortService
         // ID
-        UUID uuid = bluetoothDevice.getUuids()[0].getUuid();
+//        UUID uuid = bluetoothDevice.getUuids()[0].getUuid();
         try {
             Log.w(TAG, "Trying to connect with standard method");
             bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(uuid);
