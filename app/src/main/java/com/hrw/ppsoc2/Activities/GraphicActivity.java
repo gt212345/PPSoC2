@@ -261,9 +261,9 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         Log.w(TAG,"receiveData called");
         while (true) {
             if (inputStream.available() >= 15) {
-                Log.w(TAG, "Data available, header: "+input[0]+"and "+input[1]);
                 input = new byte[15];
                 inputStream.read(input);
+                Log.w(TAG, "Data available, header: "+input[0]+"and "+input[1]);
                 if (input[0] == 0xaa && input[1] == 0xaa) {
                     Log.w(TAG, "Data header confirmed");
                     dataListener = new LineChartFragment();
