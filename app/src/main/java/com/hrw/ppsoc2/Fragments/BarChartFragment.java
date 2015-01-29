@@ -144,7 +144,7 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
     @Override
     public void doAfterDataReceived(byte[] input,ArrayList<Integer> data,int position) {
         setData(input);
-        xData.add(input[5]+input[6]+input[7]+input[8]);
+        xData.add(input[5]+10*input[6]+100*input[7]+1000*input[8]);
     }
 
     private void setData(byte[] input) {
@@ -177,6 +177,12 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
         barChart.setData(data);
         Legend legend = barChart.getLegend();
         legend.setTextColor(Color.WHITE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                barChart.animateX(500);
+            }
+        });
     }
 
     private void setUpChart() {

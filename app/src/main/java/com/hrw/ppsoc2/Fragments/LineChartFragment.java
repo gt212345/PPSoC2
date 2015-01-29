@@ -165,17 +165,18 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input,ArrayList<Integer> data, int position) {
+        Log.w(TAG,"position"+position);
         switch (position){
             case 1:
                 xData.add((int)input[4]);
                 drawLineChart(input,position);
                 break;
             case 2:
-                xData.add(input[9]+input[10]+input[11]+input[12]);
+                xData.add(input[9]+10*input[10]+100*input[11]+1000*input[12]);
                 drawLineChart(input,position);
                 break;
             case 3:
-                xData.add(input[13]+input[14]);
+                xData.add(input[13]+10*input[14]);
                 drawLineChart(input,position);
                 break;
         }
@@ -240,7 +241,16 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
         YLabels y = lineChart.getYLabels();
         y.setTextColor(Color.WHITE);
-        y.setLabelCount(3);
+        switch (position) {
+            case 1:
+                y.setLabelCount(3);
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+        }
+
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -263,7 +273,13 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                     lineChart.setDragEnabled(true);
                     lineChart.setScaleEnabled(true);
                     lineChart.setPinchZoom(true);
-                    lineChart.setYRange(0, 3, true);
+                    switch (position){
+                        case 1:
+                            lineChart.setYRange(0, 3, true);
+                            break;
+                        default:
+                            break;
+                    }
                     lineChart.setDrawGridBackground(false);
                     lineChart.setDrawHorizontalGrid(false);
                     lineChart.setDrawVerticalGrid(false);

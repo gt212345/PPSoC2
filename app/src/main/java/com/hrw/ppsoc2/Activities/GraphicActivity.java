@@ -341,16 +341,16 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                         callAfterDataReceived(dataListenerLin, input, weight,1);
                     }
                     if(dataListenerLin2 != null) {
-                        callAfterDataReceived(dataListenerLin2, input, weight,0);
+                        callAfterDataReceived(dataListenerLin2, input, weight,2);
                     }
                     if(dataListenerLin3 != null) {
-                        callAfterDataReceived(dataListenerLin3, input, weight,0);
+                        callAfterDataReceived(dataListenerLin3, input, weight,3);
                     }
                     if(dataListenerPie != null) {
-                        callAfterDataReceived(dataListenerPie,input, weight,2);
+                        callAfterDataReceived(dataListenerPie,input, weight,0);
                     }
                     if(dataListenerBar != null) {
-                        callAfterDataReceived(dataListenerBar,input, weight,3);
+                        callAfterDataReceived(dataListenerBar,input, weight,0);
                     }
                 }
             }
