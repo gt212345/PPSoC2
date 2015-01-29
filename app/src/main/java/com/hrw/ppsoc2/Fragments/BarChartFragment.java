@@ -46,6 +46,8 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
 
     private OnFragmentInteractionListener mListener;
 
+    private ArrayList<Integer> xData;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -75,6 +77,7 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        xData = new ArrayList<>();
     }
 
     @Override
@@ -98,13 +101,6 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
             ((GraphicActivity)getActivity()).getActionBars().setTitle("變異度分析");
-        }
-        if(barChart != null) {
-            if (isVisibleToUser && barChart.getData() != null) {
-                barChart.animateXY(2000, 2000);
-            } else {
-                barChart.clear();
-            }
         }
     }
 
@@ -146,25 +142,22 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
 
 
     @Override
-    public void doAfterDataReceived(byte[] input) {
-        setData(10,10);
+    public void doAfterDataReceived(byte[] input,ArrayList<Integer> data,int position) {
+        setData(input);
+        xData.add(input[5]+input[6]+input[7]+input[8]);
     }
 
-    private void setData(int count, float range) {
-        if (barChart == null) {
-            setUpChart();
-        }
+    private void setData(byte[] input) {
+        setUpChart();
         ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++) {
-            xVals.add(String.valueOf(i % 12));
+        for (int i = 0; i < xData.size(); i++) {
+            xVals.add("???");
         }
 
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
 
-        for (int i = 0; i < count; i++) {
-            float mult = (range + 1);
-            float val = (float) (Math.random() * mult);
-            yVals1.add(new BarEntry(val, i));
+        for (int i = 0; i < xData.size(); i++) {
+            yVals1.add(new BarEntry(xData.get(i),i));
         }
 
         BarDataSet set1 = new BarDataSet(yVals1, "DataSet");

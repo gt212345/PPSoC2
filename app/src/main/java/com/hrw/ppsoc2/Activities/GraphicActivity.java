@@ -70,8 +70,12 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     private ProgressDialog progressDialog;
 
     private DataListener dataListenerLin;
+    private DataListener dataListenerLin2;
+    private DataListener dataListenerLin3;
     private DataListener dataListenerPie;
     private DataListener dataListenerBar;
+
+    private ArrayList<Integer> weight;
 
     private byte[] input;
 
@@ -81,8 +85,8 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         connectListener.doAfterConnected();
     }
 
-    private void callAfterDataReceived(DataListener dataListener,byte[] input) {
-        dataListener.doAfterDataReceived(input);
+    private void callAfterDataReceived(DataListener dataListener,byte[] input,ArrayList<Integer> data,int position) {
+        dataListener.doAfterDataReceived(input,data,position);
     }
 
     @Override
@@ -90,6 +94,11 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphic);
 
+        weight = new ArrayList<>();
+        weight.add(0);
+        weight.add(0);
+        weight.add(0);
+        weight.add(0);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -153,9 +162,54 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         }
 
         @Override
+        public void setPrimaryItem(ViewGroup container, int position, Object object) {
+            super.setPrimaryItem(container, position, object);
+            switch (position) {
+                case 0:
+                    dataListenerLin = (LineChartFragment)object;
+                    connectListenerLin = (LineChartFragment)object;
+                    break;
+                case 1:
+                    dataListenerPie = (PieChartFragment)object;
+                    connectListenerPie = (PieChartFragment)object;
+                    break;
+                case 2:
+                    dataListenerBar = (BarChartFragment)object;
+                    connectListenerBar = (BarChartFragment)object;
+                    break;
+                case 3:
+                    dataListenerLin2 = (BarChartFragment)object;
+                    break;
+                case 4:
+                    dataListenerLin3 = (BarChartFragment)object;
+                    break;
+            }
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            super.destroyItem(container, position, object);
+            switch (position) {
+                case 0:
+                    dataListenerLin = null;
+                    break;
+                case 1:
+                    dataListenerPie = null;
+                    break;
+                case 2:
+                    dataListenerBar = null;
+                    break;
+                case 3:
+                    dataListenerLin2 = null;
+                    break;
+                case 4:
+                    dataListenerLin3 = null;
+                    break;
+            }
+        }
+
+        @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
             Fragment fragment;
             switch (position){
                 case 0:
@@ -172,6 +226,16 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                     fragment = BarChartFragment.newInstance("","");
                     dataListenerBar = (BarChartFragment)fragment;
                     connectListenerBar = (BarChartFragment)fragment;
+                    return fragment;
+                case 3:
+                    fragment = LineChartFragment.newInstance("","");
+                    dataListenerLin2 = (LineChartFragment)fragment;
+//                    connectListenerLin = (LineChartFragment)fragment;
+                    return fragment;
+                case 4:
+                    fragment = LineChartFragment.newInstance("","");
+                    dataListenerLin3 = (LineChartFragment)fragment;
+//                    connectListenerLin = (LineChartFragment)fragment;
                     return fragment;
             }
             return null;
@@ -191,6 +255,10 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
                 case 2:
+                    return getString(R.string.title_section3).toUpperCase(l);
+                case 3:
+                    return getString(R.string.title_section3).toUpperCase(l);
+                case 4:
                     return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
@@ -220,13 +288,13 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 } else {
                     progressDialog.cancel();
                     Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
-                    Log.w(TAG,"no spp match");
+                    Log.w(TAG, "no spp match");
                 }
             }
         } else {
             progressDialog.cancel();
             Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
-            Log.w(TAG,"no paired device");
+            Log.w(TAG, "no paired device");
         }
     }
 
@@ -249,7 +317,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         } catch (IOException e) {
             progressDialog.cancel();
             Toast.makeText(this,"Connect attempt failed",Toast.LENGTH_SHORT).show();
-            Log.w(TAG,e.toString());
+            Log.w(TAG, e.toString());
         }
     }
 
@@ -259,19 +327,43 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
             if (inputStream.available() >= 15) {
                 input = new byte[15];
                 inputStream.read(input);
-                Log.w(TAG, "Data available, header: "+input[0]+"and "+input[1]);
                 if (input[0] == -86/* && input[1] == -86*/) {
-                    Log.w(TAG, "Data header confirmed");
-                    callAfterDataReceived(dataListenerLin, input);
-                    callAfterDataReceived(dataListenerPie,input);
-                    callAfterDataReceived(dataListenerBar,input);
+                    if(input[4] == 0){
+                        weight.set(0,weight.get(0)+1);
+                    } else if(input[4] == 1){
+                        weight.set(1,weight.get(1)+1);
+                    } else if(input[4] == 2){
+                        weight.set(2,weight.get(2)+1);
+                    } else if (input[4] == 3) {
+                        weight.set(3,weight.get(3)+1);
+                    }
+                    if(dataListenerLin != null) {
+                        callAfterDataReceived(dataListenerLin, input, weight,1);
+                    }
+                    if(dataListenerLin2 != null) {
+                        callAfterDataReceived(dataListenerLin2, input, weight,0);
+                    }
+                    if(dataListenerLin3 != null) {
+                        callAfterDataReceived(dataListenerLin3, input, weight,0);
+                    }
+                    if(dataListenerPie != null) {
+                        callAfterDataReceived(dataListenerPie,input, weight,2);
+                    }
+                    if(dataListenerBar != null) {
+                        callAfterDataReceived(dataListenerBar,input, weight,3);
+                    }
                 }
             }
         }
     }
 
-    public InputStream getInputStream() {
-        return this.inputStream;
+    @Override
+    protected void onStop() {
+        super.onStop();
+        try {
+            bluetoothSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
 }

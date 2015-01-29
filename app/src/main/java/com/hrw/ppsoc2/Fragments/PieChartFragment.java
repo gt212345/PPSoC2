@@ -6,14 +6,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.PieData;
+import com.github.mikephil.charting.data.PieDataSet;
+import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.utils.Legend;
+import com.github.mikephil.charting.utils.YLabels;
+import com.hrw.ppsoc2.Activities.GraphicActivity;
 import com.hrw.ppsoc2.Interface.ConnectListener;
 import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,6 +63,14 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser){
+            ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度分析");
+        }
     }
 
     public PieChartFragment() {
@@ -119,31 +137,97 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
         }
     }
 
-    private void setData() {
+    private void setData(byte[] input,ArrayList<Integer> data) {
         // TODO: Fill blank setData method
-        if(pieChart == null) {
-            setUpChart();
+        setUpChart();
+        pieChart.setHoleRadius(60f);
+
+        pieChart.setDescription("");
+        pieChart.setValueTextColor(Color.BLACK);
+        pieChart.setDrawYValues(true);
+        pieChart.setDrawCenterText(true);
+
+        pieChart.setDrawHoleEnabled(true);
+
+        pieChart.setRotationAngle(0);
+
+        // draws the corresponding description value into the slice
+        pieChart.setDrawXValues(true);
+
+        // enable rotation of the chart by touch
+        pieChart.setRotationEnabled(true);
+
+        // display percentage values
+        pieChart.setUsePercentValues(true);
+
+        ArrayList<Entry> yVals = new ArrayList<>();
+        ArrayList<String> xVals = new ArrayList<>();
+        for (int i = 0; i < data.size();i++){
+            yVals.add(new Entry(data.get(i), i));
+            xVals.add("嚴重程度: "+String .valueOf(i));
         }
+
+        PieDataSet set = new PieDataSet(yVals,"嚴重度結果");
+        set.setSliceSpace(3f);
+
+        ArrayList<Integer> colors = new ArrayList<Integer>();
+
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.COLORFUL_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.PASTEL_COLORS)
+            colors.add(c);
+
+        colors.add(ColorTemplate.getHoloBlue());
+
+        set.setColors(colors);
+
+
+        PieData temp = new PieData(xVals,set);
+        pieChart.setData(temp);
+        Legend legend = pieChart.getLegend();
+        legend.setTextColor(Color.WHITE);
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                pieChart.animateX(500);
+            }
+        });
     }
 
     @Override
     public void doAfterConnected() {
-        setData();
+
     }
 
     @Override
-    public void doAfterDataReceived(byte[] input) {
-
+    public void doAfterDataReceived(byte[] input,ArrayList<Integer> data,int position) {
+        setData(input,data);
     }
 
     private void setUpChart(){
         pieChart = (PieChart) getView().findViewById(R.id.piechart);
-        if(pieChart != null) {
-            pieChart.setHoleColor(Color.rgb(235, 235, 235));
-            pieChart.setDescription("");
-            pieChart.setNoDataText("");
-            pieChart.setCenterText("變異度分析");
-        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(pieChart != null) {
+                    pieChart.setHoleColor(Color.rgb(235, 235, 235));
+                    pieChart.setDescription("");
+                    pieChart.setNoDataText("");
+                    pieChart.setCenterText("嚴重度分析");
+                }
+            }
+        });
     }
 
 

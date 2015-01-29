@@ -158,24 +158,46 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
 
     @Override
-    public void doAfterDataReceived(byte[] input) {
-        xData.add((int)input[4]);
-        drawLineChart(input);
+    public void doAfterDataReceived(byte[] input,ArrayList<Integer> data, int position) {
+        switch (position){
+            case 1:
+                xData.add((int)input[4]);
+                drawLineChart(input,position);
+                break;
+            case 2:
+                xData.add(input[9]+input[10]+input[11]+input[12]);
+                drawLineChart(input,position);
+                break;
+            case 3:
+                xData.add(input[13]+input[14]);
+                drawLineChart(input,position);
+                break;
+        }
     }
 
 
 
-    private void drawLineChart(byte[] input) {
-        if(lineChart == null){
-            setUpChart();
-        }
+    private void drawLineChart(byte[] input, int position) {
+        setUpChart();
         Entry temp;
         ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
         for(int i = 0; i < xData.size();i++){
             temp = new Entry(xData.get(i),i);//(Y軸數值,項數)
             valsComp1.add(temp);
         }
-        LineDataSet setComp1 = new LineDataSet(valsComp1, "嚴重度");
+        LineDataSet setComp1 = null;
+        switch (position) {
+            case 1:
+                setComp1 = new LineDataSet(valsComp1, "嚴重度");
+                break;
+            case 2:
+                setComp1 = new LineDataSet(valsComp1, "幅值平均");
+                break;
+            case 3:
+                setComp1 = new LineDataSet(valsComp1, "頻率");
+                break;
+        }
+
 
 //            setComp1.setDrawCubic(true);
 //            setComp1.setDrawCircles(false);
@@ -194,7 +216,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
          * X軸參數
          */
         for(int i = 0;i < valsComp1.size();i++){
-            xVals.add((i+1)+" m");
+            xVals.add(2*(i+1)+" s");
         }
 
         LineData data = new LineData(xVals, dataSets);
