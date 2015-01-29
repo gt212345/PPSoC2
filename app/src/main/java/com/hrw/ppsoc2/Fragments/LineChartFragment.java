@@ -47,6 +47,8 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
     private String mParam1;
     private String mParam2;
 
+    private int position;
+
     public LineChart lineChart;
     public List<Integer> xData;
     private String TAG = "LineChartFragment";
@@ -87,6 +89,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        this.position = Integer.valueOf(mParam1);
         xData = new ArrayList<>();
     }
 
@@ -99,17 +102,20 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        //setUpChart();
-    }
-
-    @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            if(lineChart != null)lineChart.animateX(500);
-            ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度");
+            switch (position){
+                case 1:
+                    ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度");
+                    break;
+                case 2:
+                    ((GraphicActivity)getActivity()).getActionBars().setTitle("震顫幅值平均");
+                    break;
+                case 3:
+                    ((GraphicActivity)getActivity()).getActionBars().setTitle("震顫頻率");
+                    break;
+            }
         }
     }
 

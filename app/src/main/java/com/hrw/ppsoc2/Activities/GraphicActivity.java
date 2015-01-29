@@ -178,10 +178,10 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                     connectListenerBar = (BarChartFragment)object;
                     break;
                 case 3:
-                    dataListenerLin2 = (BarChartFragment)object;
+                    dataListenerLin2 = (LineChartFragment)object;
                     break;
                 case 4:
-                    dataListenerLin3 = (BarChartFragment)object;
+                    dataListenerLin3 = (LineChartFragment)object;
                     break;
             }
         }
@@ -213,7 +213,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
             Fragment fragment;
             switch (position){
                 case 0:
-                    fragment = LineChartFragment.newInstance("","");
+                    fragment = LineChartFragment.newInstance("1","");
                     dataListenerLin = (LineChartFragment)fragment;
                     connectListenerLin = (LineChartFragment)fragment;
                     return fragment;
@@ -228,12 +228,12 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                     connectListenerBar = (BarChartFragment)fragment;
                     return fragment;
                 case 3:
-                    fragment = LineChartFragment.newInstance("","");
+                    fragment = LineChartFragment.newInstance("2","");
                     dataListenerLin2 = (LineChartFragment)fragment;
 //                    connectListenerLin = (LineChartFragment)fragment;
                     return fragment;
                 case 4:
-                    fragment = LineChartFragment.newInstance("","");
+                    fragment = LineChartFragment.newInstance("3","");
                     dataListenerLin3 = (LineChartFragment)fragment;
 //                    connectListenerLin = (LineChartFragment)fragment;
                     return fragment;
@@ -243,7 +243,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
 
         @Override
         public int getCount() {
-            return 3;
+            return 5;
         }
 
         @Override
