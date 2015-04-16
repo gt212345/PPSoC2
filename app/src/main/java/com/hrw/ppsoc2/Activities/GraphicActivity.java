@@ -61,6 +61,8 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     private ConnectListener connectListenerPie;
     private ConnectListener connectListenerBar;
 
+    private static final String DEVICE_NAME = "Spp";
+
     private InputStream inputStream;
     private Handler handler;
     private HandlerThread handlerThread;
@@ -276,7 +278,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                 .getBondedDevices();
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
-                if (device.getName().equals("Spp")) {
+                if (device.getName().equals(DEVICE_NAME)) {
                     bluetoothDevice = device;
                     handler.post(new Runnable() {
                         @Override

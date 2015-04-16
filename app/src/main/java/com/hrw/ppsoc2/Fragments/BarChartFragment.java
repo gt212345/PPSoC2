@@ -151,7 +151,7 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
         setUpChart();
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < xData.size(); i++) {
-            xVals.add("???");
+            xVals.add(2*(i+1)+" s");
         }
 
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
@@ -162,8 +162,8 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
 
         BarDataSet set1 = new BarDataSet(yVals1, "DataSet");
         set1.setBarSpacePercent(35f);
-        set1.setHighLightColor(Color.WHITE);
-        set1.setBarShadowColor(getResources().getColor(R.color.background_material_dark));
+        set1.setHighLightColor(Color.BLACK);
+        set1.setBarShadowColor(getResources().getColor(R.color.background_material_light));
 
         ArrayList<BarDataSet> dataSets = new ArrayList<BarDataSet>();
         dataSets.add(set1);
@@ -171,12 +171,12 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
         BarData data = new BarData(xVals, dataSets);
 
         XLabels x = barChart.getXLabels();
-        x.setTextColor(Color.WHITE);
+        x.setTextColor(Color.BLACK);
         YLabels y = barChart.getYLabels();
-        y.setTextColor(Color.WHITE);
+        y.setTextColor(Color.BLACK);
         barChart.setData(data);
         Legend legend = barChart.getLegend();
-        legend.setTextColor(Color.WHITE);
+        legend.setTextColor(Color.BLACK);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -189,7 +189,7 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
         barChart = (BarChart) getView().findViewById(R.id.barchart);
         if (barChart != null){
             barChart.setDrawYValues(true);
-            barChart.setValueTextColor(Color.WHITE);
+            barChart.setValueTextColor(Color.BLACK);
             barChart.setDescription("");
             barChart.setDrawHorizontalGrid(false);
             barChart.setDrawVerticalGrid(false);

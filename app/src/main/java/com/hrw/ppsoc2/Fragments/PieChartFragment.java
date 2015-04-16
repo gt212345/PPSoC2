@@ -195,7 +195,7 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
         PieData temp = new PieData(xVals,set);
         pieChart.setData(temp);
         Legend legend = pieChart.getLegend();
-        legend.setTextColor(Color.WHITE);
+        legend.setTextColor(Color.BLACK);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

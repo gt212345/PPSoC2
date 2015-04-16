@@ -4,19 +4,15 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.github.mikephil.charting.utils.Legend;
 import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
@@ -25,7 +21,6 @@ import com.hrw.ppsoc2.Interface.ConnectListener;
 import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -165,18 +160,20 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input,ArrayList<Integer> data, int position) {
-        Log.w(TAG,"position"+position);
+        int temp;
         switch (position){
             case 1:
                 xData.add((int)input[4]);
                 drawLineChart(input,position);
                 break;
             case 2:
-                xData.add(input[9]+10*input[10]+100*input[11]+1000*input[12]);
+                temp = (int)floatCalc(input);
+                xData.add(temp);
                 drawLineChart(input,position);
                 break;
             case 3:
-                xData.add(input[13]+10*input[14]);
+                temp = (int)floatCalc(input);
+                xData.add(temp);
                 drawLineChart(input,position);
                 break;
         }
@@ -204,19 +201,17 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                 setComp1 = new LineDataSet(valsComp1, "頻率");
                 break;
         }
-
-
-//            setComp1.setDrawCubic(true);
-//            setComp1.setDrawCircles(false);
-        setComp1.setLineWidth(5f);
-        setComp1.setCircleSize(6f);
+        setComp1.setLineWidth(4f);
+        setComp1.setCircleSize(5f);
+        setComp1.resetColors();
+        setComp1.setColor(Color.parseColor("#ff263238"));
+        setComp1.setCircleColor(Color.parseColor("#ff263238"));
         setComp1.setHighLightColor(Color.rgb(244, 117, 117));
-        setComp1.setColor(ColorTemplate.VORDIPLOM_COLORS[0]);
-        setComp1.setCircleColor(ColorTemplate.VORDIPLOM_COLORS[0]);
+
 
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(setComp1);
-//            dataSets.add(setComp2);
+        //            dataSets.add(setComp2);
 
         ArrayList<String> xVals = new ArrayList<String>();
         /**
@@ -233,14 +228,14 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
         Legend legend = lineChart.getLegend();
         legend.setForm(Legend.LegendForm.SQUARE);
         legend.setFormSize(6f);
-        legend.setTextColor(Color.WHITE);
+        legend.setTextColor(Color.BLACK);
 
 
         XLabels x = lineChart.getXLabels();
-        x.setTextColor(Color.WHITE);
+        x.setTextColor(Color.BLACK);
 
         YLabels y = lineChart.getYLabels();
-        y.setTextColor(Color.WHITE);
+        y.setTextColor(Color.BLACK);
         switch (position) {
             case 1:
                 y.setLabelCount(3);
@@ -283,10 +278,14 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                     lineChart.setDrawGridBackground(false);
                     lineChart.setDrawHorizontalGrid(false);
                     lineChart.setDrawVerticalGrid(false);
-                    lineChart.setBackgroundColor(Color.parseColor("#ff303030"));
+                    lineChart.setBackgroundColor(getResources().getColor(R.color.background_material_light));
                 }
             });
         }
+    }
+
+    private float floatCalc(byte[] input){
+        return 0;
     }
 
 }

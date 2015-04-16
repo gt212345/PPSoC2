@@ -3,7 +3,7 @@ xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_paren
 android:layout_height="match_parent"  tools:context=".BTConnectActivity">
 
     <com.github.mikephil.charting.charts.PieChart
-        android:background="@color/background_material_dark"
+        android:background="@color/background_material_light"
         android:id="@+id/piechart"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
