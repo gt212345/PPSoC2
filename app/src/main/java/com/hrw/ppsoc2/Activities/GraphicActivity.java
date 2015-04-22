@@ -326,8 +326,8 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     private void receiveData() throws IOException {
         Log.w(TAG,"receiveData called");
         while (true) {
-            if (inputStream.available() >= 15) {
-                input = new byte[15];
+            if (inputStream.available() >= 11) {
+                input = new byte[11];
                 inputStream.read(input);
                 if (input[0] == -86/* && input[1] == -86*/) {
                     if(input[4] == 0){

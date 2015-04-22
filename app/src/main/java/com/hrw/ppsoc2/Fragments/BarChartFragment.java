@@ -144,7 +144,7 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
     @Override
     public void doAfterDataReceived(byte[] input,ArrayList<Integer> data,int position) {
         setData(input);
-        xData.add(input[5]+10*input[6]+100*input[7]+1000*input[8]);
+        xData.add((input[7]+10*input[8]));
     }
 
     private void setData(byte[] input) {
