@@ -104,13 +104,13 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
         if(isVisibleToUser){
             switch (position){
                 case 1:
-                    ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度");
+                    ((GraphicActivity)getActivity()).getActionBars().setTitle("Tremor severity index");
                     break;
                 case 2:
-                    ((GraphicActivity)getActivity()).getActionBars().setTitle("震顫幅值平均");
+                    ((GraphicActivity)getActivity()).getActionBars().setTitle("The mean of tremor amplitude");
                     break;
                 case 3:
-                    ((GraphicActivity)getActivity()).getActionBars().setTitle("震顫頻率");
+                    ((GraphicActivity)getActivity()).getActionBars().setTitle("The frequency frequency");
                     break;
             }
         }
@@ -173,7 +173,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                 break;
             case 3:
 //                temp = (int)floatCalc(input,1);
-                xData.add((int)ByteParse.getFloatValue(input[9],input[10]));
+                xData.add((int) ByteParse.getFloatValue(input[9],input[10]));
                 drawLineChart(input,position);
                 break;
         }
@@ -192,13 +192,13 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
         LineDataSet setComp1 = null;
         switch (position) {
             case 1:
-                setComp1 = new LineDataSet(valsComp1, "嚴重度");
+                setComp1 = new LineDataSet(valsComp1, "Tremor severity index");
                 break;
             case 2:
-                setComp1 = new LineDataSet(valsComp1, "幅值平均");
+                setComp1 = new LineDataSet(valsComp1, "the mean of tremor amplitude");
                 break;
             case 3:
-                setComp1 = new LineDataSet(valsComp1, "頻率");
+                setComp1 = new LineDataSet(valsComp1, "the frequency frequency");
                 break;
         }
         setComp1.setLineWidth(4f);

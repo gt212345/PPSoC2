@@ -101,7 +101,7 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            ((GraphicActivity)getActivity()).getActionBars().setTitle("變異度分析");
+            ((GraphicActivity)getActivity()).getActionBars().setTitle("the standard variation of tremor amplitude");
         }
     }
 
@@ -161,7 +161,7 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
             yVals1.add(new BarEntry(xData.get(i),i));
         }
 
-        BarDataSet set1 = new BarDataSet(yVals1, "DataSet");
+        BarDataSet set1 = new BarDataSet(yVals1, "Standard variation of tremor amplitude");
         set1.setBarSpacePercent(35f);
         set1.setHighLightColor(Color.BLACK);
         set1.setBarShadowColor(getResources().getColor(R.color.background_material_light));

@@ -69,7 +69,7 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser){
-            ((GraphicActivity)getActivity()).getActionBars().setTitle("嚴重度分析");
+            ((GraphicActivity)getActivity()).getActionBars().setTitle("Analysis of tremor severity index");
         }
     }
 
@@ -164,10 +164,10 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
         ArrayList<String> xVals = new ArrayList<>();
         for (int i = 0; i < data.size();i++){
             yVals.add(new Entry(data.get(i), i));
-            xVals.add("嚴重程度: "+String .valueOf(i));
+            xVals.add("Level tremor severity: "+String .valueOf(i));
         }
 
-        PieDataSet set = new PieDataSet(yVals,"嚴重度結果");
+        PieDataSet set = new PieDataSet(yVals,"Analysis of tremor severity index");
         set.setSliceSpace(3f);
 
         ArrayList<Integer> colors = new ArrayList<Integer>();
@@ -224,7 +224,7 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
                     pieChart.setHoleColor(Color.rgb(235, 235, 235));
                     pieChart.setDescription("");
                     pieChart.setNoDataText("");
-                    pieChart.setCenterText("嚴重度分析");
+                    pieChart.setCenterText("");
                 }
             }
         });
