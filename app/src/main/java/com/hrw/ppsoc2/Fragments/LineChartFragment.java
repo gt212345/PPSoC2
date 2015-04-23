@@ -18,6 +18,7 @@ import com.github.mikephil.charting.utils.Legend;
 import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
 import com.hrw.ppsoc2.Activities.GraphicActivity;
+import com.hrw.ppsoc2.Interface.ByteParse;
 import com.hrw.ppsoc2.Interface.ConnectListener;
 import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
@@ -167,13 +168,12 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                 drawLineChart(input,position);
                 break;
             case 2:
-//                temp = (int)floatCalc(input,0);
-                xData.add((int)(input[5]+10*input[6]));
+                xData.add((int) ByteParse.getFloatValue(input[5], input[6]));
                 drawLineChart(input,position);
                 break;
             case 3:
 //                temp = (int)floatCalc(input,1);
-                xData.add((int)(input[9]+10*input[10]));
+                xData.add((int)ByteParse.getFloatValue(input[9],input[10]));
                 drawLineChart(input,position);
                 break;
         }
@@ -284,55 +284,5 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
         }
     }
 
-    private float floatCalc(byte[] input,int cas){
-        ArrayList<Byte> inputStream;
-        switch(cas){
-            case 0:
-                inputStream = toArray(input[5],input[6],input[7],input[8]);
-                break;
-            case 1:
-                inputStream = toArray(input[9],input[10],input[11],input[12]);
-                break;
-            default:
-                inputStream = null;
-                break;
-        }
-        int num1 = 0;
-        int j = 30;
-        for (int i = 128; i >= 1; i = i / 2) {
-            num1 += inputStream.get(j) * i;
-            Log.w(TAG,"jvalue: "+inputStream.get(j)+"j: "+j);
-            j--;
-        }
-        int num2 = 1;
-        int k = 1;
-        for(int i = 22;i>=0;i--){
-            num2 += inputStream.get(i) * k/2;
-//            Log.w(TAG,"i: "+inputStream.get(i));
-            k = k/2;
-        }
-        if (inputStream.get(31) == 1){
-            Log.w(TAG,"float result: "+(0-num1*num2));
-            return 0-num1*num2;
-        } else {
-            Log.w(TAG,"float result: "+num1*num2);
-            return num1*num2;
-        }
-    }
-
-    /**
-     *Start from lsb to msb*/
-    private ArrayList<Byte> toArray(byte b1,byte b2, byte b3, byte b4){
-        ArrayList<Byte> temp = new ArrayList<>();
-        Byte[] tempB = {b1,b2,b3,b4};
-        for(Byte b:tempB) {
-            for (int i = 0; i < 8; i++) {
-                temp.add((byte) ((b >> i) & 0x1));
-            }
-        }
-        Log.w(TAG,""+temp.size());
-        Log.w(TAG,"temp: "+temp.get(0)+","+temp.get(1)+","+temp.get(2));
-        return temp;
-    }
 
 }

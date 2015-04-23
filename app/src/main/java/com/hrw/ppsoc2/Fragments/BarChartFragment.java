@@ -18,6 +18,7 @@ import com.github.mikephil.charting.utils.Legend;
 import com.github.mikephil.charting.utils.XLabels;
 import com.github.mikephil.charting.utils.YLabels;
 import com.hrw.ppsoc2.Activities.GraphicActivity;
+import com.hrw.ppsoc2.Interface.ByteParse;
 import com.hrw.ppsoc2.Interface.ConnectListener;
 import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
@@ -143,8 +144,8 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
 
     @Override
     public void doAfterDataReceived(byte[] input,ArrayList<Integer> data,int position) {
+        xData.add((int) ByteParse.getFloatValue(input[7],input[8]));
         setData(input);
-        xData.add((input[7]+10*input[8]));
     }
 
     private void setData(byte[] input) {
