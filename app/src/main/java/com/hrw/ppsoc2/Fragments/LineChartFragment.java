@@ -162,17 +162,21 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
     @Override
     public void doAfterDataReceived(byte[] input,ArrayList<Integer> data, int position) {
+        int check;
         switch (position){
             case 1:
                 xData.add((int)input[4]);
                 drawLineChart(input,position);
                 break;
             case 2:
-                xData.add((int) ByteParse.getFloatValue(input[5], input[6]));
+                xData.add((int) ByteParse.getFloatValue(input[5], input[6],0));
                 drawLineChart(input,position);
                 break;
             case 3:
-                xData.add((int) ByteParse.getFloatValue(input[9],input[10]));
+                check = (int) ByteParse.getFloatValue(input[9],input[10],1);
+                if (check <= 10000) {
+                    xData.add((int) ByteParse.getFloatValue(input[9], input[10], 1));
+                }
                 drawLineChart(input,position);
                 break;
         }

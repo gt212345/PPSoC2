@@ -1,14 +1,20 @@
 package com.hrw.ppsoc2.Interface;
 
+import android.util.Log;
+
 /**
  * Created by PPSoC on 2015/4/23.
  */
 public class ByteParse {
-    static public float getFloatValue(Byte L,Byte H){
+    private final static String TAG = "ByteParse result";
+    static public float getFloatValue(Byte L,Byte H,int cas){
         float tempint;
         String temp = getBitstoString(H);
         temp += getBitstoString(L);
-        tempint = Integer.parseInt(temp.substring(0,15) , 2);
+        tempint = Integer.parseInt(temp.substring(0, 16), 2);
+        if(cas == 1){
+            Log.w(TAG, temp + "int = "+tempint);
+        }
         return tempint;
     }
 
