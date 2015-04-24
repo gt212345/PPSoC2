@@ -101,7 +101,7 @@ public class BarChartFragment extends Fragment implements ConnectListener, DataL
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if(isVisibleToUser){
-            ((GraphicActivity)getActivity()).getActionBars().setTitle("the standard variation of tremor amplitude");
+            ((GraphicActivity)getActivity()).getActionBars().setTitle("Standard variation of tremor amplitude");
         }
     }
 

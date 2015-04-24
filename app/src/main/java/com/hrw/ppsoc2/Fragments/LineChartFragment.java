@@ -110,7 +110,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                     ((GraphicActivity)getActivity()).getActionBars().setTitle("The mean of tremor amplitude");
                     break;
                 case 3:
-                    ((GraphicActivity)getActivity()).getActionBars().setTitle("The frequency frequency");
+                    ((GraphicActivity)getActivity()).getActionBars().setTitle("The tremor frequency");
                     break;
             }
         }
@@ -172,7 +172,6 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                 drawLineChart(input,position);
                 break;
             case 3:
-//                temp = (int)floatCalc(input,1);
                 xData.add((int) ByteParse.getFloatValue(input[9],input[10]));
                 drawLineChart(input,position);
                 break;
@@ -195,10 +194,10 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                 setComp1 = new LineDataSet(valsComp1, "Tremor severity index");
                 break;
             case 2:
-                setComp1 = new LineDataSet(valsComp1, "the mean of tremor amplitude");
+                setComp1 = new LineDataSet(valsComp1, "The mean of tremor amplitude");
                 break;
             case 3:
-                setComp1 = new LineDataSet(valsComp1, "the frequency frequency");
+                setComp1 = new LineDataSet(valsComp1, "The tremor frequency");
                 break;
         }
         setComp1.setLineWidth(4f);
@@ -243,6 +242,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
             case 2:
                 break;
             case 3:
+                y.setLabelCount(10);
                 break;
         }
 
@@ -271,6 +271,9 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
                     switch (position){
                         case 1:
                             lineChart.setYRange(0, 3, true);
+                            break;
+                        case 3:
+                            lineChart.setYRange(0,10,true);
                             break;
                         default:
                             break;

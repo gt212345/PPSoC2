@@ -164,7 +164,7 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
         ArrayList<String> xVals = new ArrayList<>();
         for (int i = 0; i < data.size();i++){
             yVals.add(new Entry(data.get(i), i));
-            xVals.add("Level tremor severity: "+String .valueOf(i));
+            xVals.add("Level of severity: "+String .valueOf(i));
         }
 
         PieDataSet set = new PieDataSet(yVals,"Analysis of tremor severity index");
