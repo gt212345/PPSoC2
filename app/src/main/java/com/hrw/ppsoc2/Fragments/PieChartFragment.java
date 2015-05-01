@@ -137,7 +137,7 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
         }
     }
 
-    private void setData(byte[] input,ArrayList<Integer> data) {
+    private void setData(ArrayList<Integer> data) {
         // TODO: Fill blank setData method
         setUpChart();
         pieChart.setHoleRadius(60f);
@@ -211,8 +211,8 @@ public class PieChartFragment extends Fragment implements ConnectListener, DataL
     }
 
     @Override
-    public void doAfterDataReceived(byte[] input,ArrayList<Integer> data,int position) {
-        setData(input,data);
+    public void doAfterDataReceived(ArrayList<Integer> input,ArrayList<Integer> data,int position) {
+        setData(data);
     }
 
     private void setUpChart(){

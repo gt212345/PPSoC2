@@ -47,7 +47,7 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
     private int position;
 
     public LineChart lineChart;
-    public List<Integer> xData;
+    public ArrayList<Integer> xData;
     private String TAG = "LineChartFragment";
 
     /**
@@ -139,7 +139,6 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
         super.onDetach();
         mListener = null;
     }
-
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -161,30 +160,13 @@ public class LineChartFragment extends Fragment implements ConnectListener, Data
 
 
     @Override
-    public void doAfterDataReceived(byte[] input,ArrayList<Integer> data, int position) {
-        int check;
-        switch (position){
-            case 1:
-                xData.add((int)input[4]);
-                drawLineChart(input,position);
-                break;
-            case 2:
-                xData.add((int) ByteParse.getFloatValue(input[5], input[6],0));
-                drawLineChart(input,position);
-                break;
-            case 3:
-                check = (int) ByteParse.getFloatValue(input[9],input[10],1);
-                if (check <= 10000) {
-                    xData.add((int) ByteParse.getFloatValue(input[9], input[10], 1));
-                }
-                drawLineChart(input,position);
-                break;
-        }
+    public void doAfterDataReceived(ArrayList<Integer> input, ArrayList<Integer> data, int position) {
+        xData = input;
+        drawLineChart(position);
     }
 
 
-
-    private void drawLineChart(byte[] input, int position) {
+    private void drawLineChart(int position) {
         setUpChart();
         Entry temp;
         ArrayList<Entry> valsComp1 = new ArrayList<Entry>();

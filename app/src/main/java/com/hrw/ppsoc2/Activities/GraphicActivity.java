@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.hrw.ppsoc2.Fragments.BarChartFragment;
 import com.hrw.ppsoc2.Fragments.LineChartFragment;
 import com.hrw.ppsoc2.Fragments.PieChartFragment;
+import com.hrw.ppsoc2.Interface.ByteParse;
 import com.hrw.ppsoc2.Interface.ConnectListener;
 import com.hrw.ppsoc2.Interface.DataListener;
 import com.hrw.ppsoc2.R;
@@ -31,6 +32,7 @@ import com.hrw.ppsoc2.R;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -78,6 +80,10 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     private DataListener dataListenerBar;
 
     private ArrayList<Integer> weight;
+    private ArrayList<Integer> xData1;
+    private ArrayList<Integer> xData2;
+    private ArrayList<Integer> xData3;
+    private ArrayList<Integer> xData4;
 
     private byte[] input;
 
@@ -87,7 +93,7 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
         connectListener.doAfterConnected();
     }
 
-    private void callAfterDataReceived(DataListener dataListener,byte[] input,ArrayList<Integer> data,int position) {
+    private void callAfterDataReceived(DataListener dataListener,ArrayList<Integer> input,ArrayList<Integer> data,int position) {
         dataListener.doAfterDataReceived(input,data,position);
     }
 
@@ -95,7 +101,10 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphic);
-
+        xData1 = new ArrayList<>();
+        xData2 = new ArrayList<>();
+        xData3 = new ArrayList<>();
+        xData4 = new ArrayList<>();
         weight = new ArrayList<>();
         weight.add(0);
         weight.add(0);
@@ -339,20 +348,28 @@ public class GraphicActivity extends ActionBarActivity implements LineChartFragm
                     } else if (input[4] == 3) {
                         weight.set(3,weight.get(3)+1);
                     }
+                    xData1.add((int)input[4]);
+                    xData2.add((int) ByteParse.getFloatValue(input[7],input[8],0));//bar
+                    xData3.add((int) ByteParse.getFloatValue(input[5], input[6], 0));//lin2
+                    int check;
+                    check = (int) ByteParse.getFloatValue(input[9],input[10],1);
+                    if (check <= 10000) {
+                        xData4.add((int) ByteParse.getFloatValue(input[9], input[10], 1));//lin3
+                    }
                     if(dataListenerLin != null) {
-                        callAfterDataReceived(dataListenerLin, input, weight,1);
+                        callAfterDataReceived(dataListenerLin, xData1, weight,1);
                     }
                     if(dataListenerLin2 != null) {
-                        callAfterDataReceived(dataListenerLin2, input, weight,2);
+                        callAfterDataReceived(dataListenerLin2, xData3, weight,2);
                     }
                     if(dataListenerLin3 != null) {
-                        callAfterDataReceived(dataListenerLin3, input, weight,3);
+                        callAfterDataReceived(dataListenerLin3, xData4, weight,3);
                     }
                     if(dataListenerPie != null) {
-                        callAfterDataReceived(dataListenerPie,input, weight,0);
+                        callAfterDataReceived(dataListenerPie,xData1, weight,0);
                     }
                     if(dataListenerBar != null) {
-                        callAfterDataReceived(dataListenerBar,input, weight,0);
+                        callAfterDataReceived(dataListenerBar,xData2, weight,0);
                     }
                 }
             }
